@@ -1,1 +1,1 @@
-rootProject.name = "ObsidianRestfulAPI"
+rootProject.name = "obsidian-restful-api"
