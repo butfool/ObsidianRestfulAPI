@@ -10,6 +10,6 @@ class ObsidianServerAddress(
     private val obsidianConfiguration: ObsidianConfiguration
 ) : AddressSource {
     override fun getAddress(p0: ForestRequest<*>?): ForestAddress {
-        return ForestAddress(obsidianConfiguration.host, obsidianConfiguration.port)
+        return ForestAddress("https", obsidianConfiguration.host, obsidianConfiguration.port)
     }
 }

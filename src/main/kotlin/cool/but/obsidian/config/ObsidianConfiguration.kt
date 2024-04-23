@@ -1,18 +1,16 @@
 package cool.but.obsidian.config
 
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.SpringBootConfiguration
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Configuration
 
-@SpringBootConfiguration
+@Configuration
+@ConfigurationProperties("obsidian")
 class ObsidianConfiguration {
 
-    @Value("obsidian.host")
     var host: String = "localhost"
 
-    @Value("obsidian.port")
     var port: Int = 27124
 
-    @Value("obsidian.token")
     var token: String? = null
 
     val headersMap: Map<String, String> by lazy {

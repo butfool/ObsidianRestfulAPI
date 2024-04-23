@@ -81,6 +81,10 @@ publishing {
     publications {
         register<MavenPublication>("gpr") {
             from(components["java"])
+            // 附带源码
+            artifact(tasks.getByName<Jar>("sourcesJar"))
+            // 附带文档
+            artifact(tasks.getByName<Jar>("javadocJar"))
         }
     }
 }
