@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component
 @Component
 interface ObsidianDocumentClient {
 
-    @Put("/vault/{filename}.md")
+    @Put("/vault/{filename}")
     @Address(source = ObsidianServerAddress::class)
     fun createDocument(
         @Var("filename") filename: String,
