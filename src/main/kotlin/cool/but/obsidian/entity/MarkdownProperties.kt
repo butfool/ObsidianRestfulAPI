@@ -1,3 +1,3 @@
-package cool.but.iwhale.data.obsidian
+package cool.but.obsidian.entity
 
 interface MarkdownProperties

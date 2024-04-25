@@ -1,5 +1,6 @@
 package cool.but.iwhale.data.obsidian
 
+import cool.but.obsidian.entity.MarkdownProperties
 import java.util.*
 
 class JobProperties : MarkdownProperties {
