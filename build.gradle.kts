@@ -61,8 +61,7 @@ tasks.register<Jar>("javadocJar") {
 publishing {
     repositories {
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/butfool/mvnRepo")
+            setUrl("https://maven.pkg.github.com/butfool/mvnRepo")
             credentials {
                 username = System.getenv("GITHUB_REPO_USER")
                 password = System.getenv("GITHUB_REPO_TOKEN")
