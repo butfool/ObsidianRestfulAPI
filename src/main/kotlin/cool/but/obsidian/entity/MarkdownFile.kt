@@ -1,7 +1,6 @@
 package cool.but.obsidian.entity
 
-import cool.but.obsidian.utils.Singleton
-import kotlin.reflect.KClass
+import cool.but.kt.common.utils.ObjectMapperUtils
 
 data class MarkdownFile(
     var path: String? = null,
@@ -12,7 +11,7 @@ data class MarkdownFile(
     override fun toString(): String {
         return StringBuilder().apply {
             if (properties != null) {
-                append(Singleton.yamlObjectMapper.writeValueAsString(properties))
+                append(ObjectMapperUtils.YamlMapper.writeValueAsString(properties))
                 append("---\n\n")
             }
             append(content)
@@ -32,7 +31,7 @@ data class MarkdownFile(
                     null
                 } else {
                     val yaml = content.substring(4, end)
-                    Singleton.yamlObjectMapper.readValue(yaml, propertiesClass)
+                    ObjectMapperUtils.YamlMapper.readValue(yaml, propertiesClass)
                 }
             } else {
                 null

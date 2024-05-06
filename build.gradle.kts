@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("org.springframework.boot") version "3.2.5"
     id("io.spring.dependency-management") version "1.1.4"
@@ -11,10 +9,6 @@ plugins {
 group = "cool.but"
 version = "1.0.0-SNAPSHOT"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-}
-
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
@@ -22,10 +16,14 @@ configurations {
 }
 
 repositories {
+    maven {
+        setUrl("https://maven.pkg.github.com/butfool/mvnRepo")
+    }
     mavenCentral()
 }
 
 dependencies {
+    implementation("cool.but.kt:kt-common:1.0.0-SNAPSHOT")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.0")
     implementation("com.dtflys.forest:forest-spring-boot3-starter:1.5.36")
@@ -33,13 +31,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs += "-Xjsr305=strict"
-        jvmTarget = "17"
-    }
 }
 
 tasks.withType<Test> {
@@ -71,7 +62,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/butfool/ObsidianRestfulAPI")
+            url = uri("https://maven.pkg.github.com/butfool/mvnRepo")
             credentials {
                 username = System.getenv("GITHUB_REPO_USER")
                 password = System.getenv("GITHUB_REPO_TOKEN")

@@ -2,12 +2,14 @@ package cool.but.obsidian
 
 import com.dtflys.forest.http.ForestResponse
 import com.fasterxml.jackson.databind.JsonNode
+import cool.but.kt.common.utils.AssertUtils
 import cool.but.obsidian.api.ObsidianDocumentClient
 import cool.but.obsidian.config.ObsidianConfiguration
 import cool.but.obsidian.data.dto.ListDocumentByPathResult
 import cool.but.obsidian.data.dto.SimpleSearchResult
 import cool.but.obsidian.entity.MarkdownFile
 import cool.but.obsidian.entity.MarkdownProperties
+import cool.but.obsidian.exception.ObsidianException
 import org.springframework.stereotype.Service
 
 @Service
@@ -52,9 +54,16 @@ class ObsidianAPI(
         }
     }
 
+    fun getDocumentByFileName(filename: String, propertiesClass: Class<out MarkdownProperties>): Pair<Boolean, MarkdownFile> {
+        AssertUtils.throwIf(filename.length < 3, ObsidianException("文件名长度小于 3：$filename"))
+        val searchResult = searchDocumentByFileName(filename)
+        AssertUtils.throwIf(searchResult.size != 1, ObsidianException("文件数量不为 1：${searchResult.size}"))
+        return getDocument(searchResult[0].filename!!, propertiesClass)
+    }
 
-    fun searchDocumentByText(text: String): List<SimpleSearchResult> {
-        return obsidianDocumentClient.searchDocumentByText(text, headers = obsidianConfiguration.headersMap)
+
+    fun searchDocumentByFileName(filename: String): List<SimpleSearchResult> {
+        return obsidianDocumentClient.searchDocumentByText(filename, headers = obsidianConfiguration.headersMap)
     }
 
     fun listDocumentByPath(path: String): ListDocumentByPathResult {
