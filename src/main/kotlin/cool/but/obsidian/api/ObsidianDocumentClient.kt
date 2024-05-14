@@ -11,10 +11,18 @@ import org.springframework.stereotype.Component
 @Component
 interface ObsidianDocumentClient {
 
+
+    @Delete("/vault/{filename}")
+    @Address(source = ObsidianServerAddress::class)
+    fun deleteDocument(
+        @Var("filename") path: String,
+        @Header headers: Map<String, String>,
+    ): ForestResponse<JsonNode>
+
     @Put("/vault/{filename}")
     @Address(source = ObsidianServerAddress::class)
     fun createDocument(
-        @Var("filename") filename: String,
+        @Var("filename") path: String,
         @Body content: String,
         @Header headers: Map<String, String>,
     ): ForestResponse<JsonNode>
@@ -23,7 +31,7 @@ interface ObsidianDocumentClient {
     @Get("/vault/{filename}")
     @Address(source = ObsidianServerAddress::class)
     fun getDocument(
-        @Var("filename") filename: String,
+        @Var("filename") path: String,
         @Header headers: Map<String, String>,
     ): ForestResponse<String>
 
