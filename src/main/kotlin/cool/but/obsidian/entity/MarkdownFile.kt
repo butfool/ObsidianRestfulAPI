@@ -3,7 +3,7 @@ package cool.but.obsidian.entity
 import cool.but.kt.common.utils.ObjectMapperUtils
 
 data class MarkdownFile(
-    var path: String? = null,
+    var path: String? = null, // Path with file name. Generally end with md.
     var name: String? = null,
     var properties: MarkdownProperties? = null,
     var content: String? = null,

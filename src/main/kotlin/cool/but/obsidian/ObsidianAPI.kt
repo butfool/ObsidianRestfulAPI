@@ -25,7 +25,7 @@ class ObsidianAPI(
     fun upsertDocument(markdownFile: MarkdownFile): ForestResponse<JsonNode> {
         val name = markdownFile.name!!.ensureEndWithMd()
         return obsidianDocumentClient.createDocument(
-            path = "${markdownFile.path!!}/$name",
+            path = markdownFile.path!!.ensureEndWithMd(),
             content = markdownFile.toString(),
             headers = obsidianConfiguration.headersMap
         )
@@ -50,7 +50,7 @@ class ObsidianAPI(
         return ret.first to MarkdownFile.fromString(ret.second, propertiesClass).apply {
             // 文件路径
             val lastIndex = path.lastIndexOf('/')
-            this.path = path.substring(0, lastIndex)
+            this.path = path
             this.name = path.substring(lastIndex + 1, path.length)
         }
     }
@@ -67,13 +67,13 @@ class ObsidianAPI(
         AssertUtils.throwIf(newResult.first, ObsidianException("目标路径不为空"))
 
         obsidianDocumentClient.createDocument(
-            path = newPath,
+            path = newPath.ensureEndWithMd(),
             content = oldResult.second,
             headers = obsidianConfiguration.headersMap
         )
 
         obsidianDocumentClient.deleteDocument(
-            path = oldPath,
+            path = oldPath.ensureEndWithMd(),
             headers = obsidianConfiguration.headersMap
         )
     }
