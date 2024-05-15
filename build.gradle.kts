@@ -18,6 +18,11 @@ configurations {
 repositories {
     maven {
         setUrl("https://maven.pkg.github.com/butfool/mvnRepo")
+        credentials {
+            username = System.getenv("GITHUB_REPO_USER")
+            password = System.getenv("GITHUB_REPO_TOKEN")
+        }
+
     }
     mavenCentral()
 }
