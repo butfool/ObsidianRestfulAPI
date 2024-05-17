@@ -49,7 +49,7 @@ interface ObsidianDocumentClient {
     fun listDocumentsByPath(
         @Var("path") path: String,
         @Header headers: Map<String, String>,
-        ): ListDocumentByPathResult
+        ): ForestResponse<ListDocumentByPathResult>
 
 }
 

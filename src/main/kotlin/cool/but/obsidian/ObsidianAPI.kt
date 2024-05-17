@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import cool.but.kt.common.utils.AssertUtils
 import cool.but.obsidian.api.ObsidianDocumentClient
 import cool.but.obsidian.config.ObsidianConfiguration
+import cool.but.obsidian.cool.but.kt.common.annotations.Slf4j.Companion.logger
 import cool.but.obsidian.data.dto.ListDocumentByPathResult
 import cool.but.obsidian.data.dto.SimpleSearchResult
 import cool.but.obsidian.entity.MarkdownFile
@@ -59,6 +60,10 @@ class ObsidianAPI(
      * 将文件从 oldPath 移动到 newPath
      */
     fun moveDocument(oldPath: String, newPath: String) {
+        if (oldPath == newPath) {
+            logger.debug("Path are same, skip: {}", oldPath)
+            return
+        }
         AssertUtils.throwIf(oldPath.length < 3, ObsidianException("文件名长度小于 3：$oldPath"))
         val oldResult = getDocument(oldPath)
         AssertUtils.throwIfNot(oldResult.first, ObsidianException("没有找到源文件"))
@@ -81,8 +86,7 @@ class ObsidianAPI(
     fun getDocumentByFileName(filename: String, propertiesClass: Class<out MarkdownProperties>): Pair<Boolean, MarkdownFile> {
         AssertUtils.throwIf(filename.length < 3, ObsidianException("文件名长度小于 3：$filename"))
         val searchResult = searchDocumentByFileName(filename)
-        AssertUtils.throwIf(searchResult.size != 1, ObsidianException("文件数量不为 1：${searchResult.size}"))
-        return getDocument(searchResult[0].filename!!, propertiesClass)
+        return getDocument(searchResult.sortedBy { it.score }.last().filename!!, propertiesClass)
     }
 
 
@@ -96,11 +100,23 @@ class ObsidianAPI(
                 files = emptyList()
             }
         }
-        val realPath = if (path.startsWith("/")) {
+        var realPath = if (path.startsWith("/")) {
             path.substring(1)
         } else {
             path
         }
-        return obsidianDocumentClient.listDocumentsByPath(realPath, obsidianConfiguration.headersMap)
+        realPath = if (realPath.endsWith("/")) {
+            realPath
+        } else {
+            "$realPath/"
+        }
+        val response = obsidianDocumentClient.listDocumentsByPath(realPath, obsidianConfiguration.headersMap)
+        return if (response.isSuccess) {
+            response.result
+        } else {
+            ListDocumentByPathResult().apply {
+                files = emptyList()
+            }
+        }
     }
 }
