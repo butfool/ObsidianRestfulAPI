@@ -59,7 +59,9 @@ class ObsidianAPI(
     /**
      * 将文件从 oldPath 移动到 newPath
      */
-    fun moveDocument(oldPath: String, newPath: String) {
+    fun moveDocument(old: String, new: String) {
+        val oldPath = old.ensureEndWithMd()
+        val newPath = new.ensureEndWithMd()
         if (oldPath == newPath) {
             logger.debug("Path are same, skip: {}", oldPath)
             return
