@@ -93,7 +93,9 @@ class ObsidianAPI(
 
 
     fun searchDocumentByFileName(filename: String): List<SimpleSearchResult> {
-        return obsidianDocumentClient.searchDocumentByText(filename, headers = obsidianConfiguration.headersMap)
+        return obsidianDocumentClient.searchDocumentByText(filename, headers = obsidianConfiguration.headersMap).filter {
+            it.filename!!.endsWith("$filename.md")
+        }
     }
 
     fun listDocumentByPath(path: String): ListDocumentByPathResult {
